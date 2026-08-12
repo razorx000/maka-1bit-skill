@@ -15,16 +15,6 @@ The output is an exact two-color, grid-aligned PNG. Smooth AI-generated silhouet
 
 After upload, the skill always pauses for two choices: first one of three dither styles, then one of six two-color palettes. Processing begins only after both are confirmed.
 
-## Why a dedicated skill
-
-Existing projects cover adjacent parts of the problem, but not the complete workflow:
-
-- [OpenAI ImageGen skill](https://github.com/openai/skills/blob/main/skills/.system/imagegen/SKILL.md) provides general raster generation and editing, but does not enforce a 1bit palette or pixel-grid QA.
-- [Agent Sprite Forge](https://github.com/0x0funky/agent-sprite-forge) demonstrates a useful generation-plus-deterministic-processing architecture, but targets spritesheets and game assets rather than single-image composition-faithful conversion.
-- [makew0rld/dither](https://github.com/makew0rld/dither) is a strong traditional dithering library, but it is not an agent skill and does not define subject-preservation or visual QA rules.
-
-This repository is independently implemented. Its default path uses a small Pillow-based two-color processor and validator. The installed ImageGen skill is only an optional last-resort simplification stage when deterministic tuning cannot keep the subject readable.
-
 ## Styles
 
 - `strict-dither` — ordered Bayer checker/stipple shading.
