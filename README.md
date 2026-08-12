@@ -1,4 +1,4 @@
-# Image to 1bit Skill
+# Maka 1bit Skill
 
 A Codex skill for turning an existing raster image into composition-faithful 1bit-style pixel art, with optional technically verified two-color export.
 
@@ -29,16 +29,16 @@ Every preset supports `artistic` and `binary` export. Binary export contains exa
 
 ## Install
 
-Copy `skills/image-to-1bit` into your Codex skills directory:
+Copy `skills/maka-1bit-skill` into your Codex skills directory:
 
 ```bash
-cp -R skills/image-to-1bit ~/.codex/skills/image-to-1bit
+cp -R skills/maka-1bit-skill ~/.codex/skills/maka-1bit-skill
 ```
 
 Restart Codex, then invoke it with a local or attached input image:
 
 ```text
-Use $image-to-1bit to convert this image with the strict-dither preset.
+Use $maka-1bit-skill to convert this image with the strict-dither preset.
 ```
 
 The deterministic scripts require Python 3.10+ and Pillow.
@@ -47,7 +47,7 @@ The deterministic scripts require Python 3.10+ and Pillow.
 
 ```bash
 python3 -m unittest discover -s tests -v
-python3 /path/to/skill-creator/scripts/quick_validate.py skills/image-to-1bit
+python3 /path/to/skill-creator/scripts/quick_validate.py skills/maka-1bit-skill
 ```
 
 The test suite uses generated geometric fixtures. Personal reference images and generated test outputs are intentionally excluded from the public repository.
@@ -57,7 +57,7 @@ GitHub Actions repeats the pipeline tests on Python 3.10, 3.12, and 3.13.
 ## Repository layout
 
 ```text
-skills/image-to-1bit/
+skills/maka-1bit-skill/
 ├── SKILL.md
 ├── agents/openai.yaml
 ├── references/

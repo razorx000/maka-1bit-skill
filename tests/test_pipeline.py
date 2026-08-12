@@ -10,7 +10,7 @@ from PIL import Image, ImageDraw
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SCRIPTS = ROOT / "skills" / "image-to-1bit" / "scripts"
+SCRIPTS = ROOT / "skills" / "maka-1bit-skill" / "scripts"
 
 
 class PipelineTest(unittest.TestCase):

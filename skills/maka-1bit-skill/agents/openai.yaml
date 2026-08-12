@@ -1,0 +1,4 @@
+interface:
+  display_name: "Maka 1bit Skill"
+  short_description: "Create composition-faithful 1bit-style image art"
+  default_prompt: "Use $maka-1bit-skill to turn this image into composition-faithful 1bit-style pixel art."

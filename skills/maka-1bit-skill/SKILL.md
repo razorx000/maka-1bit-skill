@@ -1,9 +1,9 @@
 ---
-name: image-to-1bit
+name: maka-1bit-skill
 description: Convert an existing photo, illustration, scan, or generated raster image into composition-faithful 1bit-style pixel art through semantic redraw, deliberate pixel clusters, limited tinted palettes, and optional strict two-color export with automated QA. Use when the user asks to turn an image into 1bit, one-bit, monochrome pixel art, Game Boy-like art, black-and-white dither art, retro bitmap art, or requests a result resembling a supplied 1bit reference. Do not use for ordinary grayscale conversion, general pixel-art creation without an input image, vector tracing, spritesheets, or edits that must remain photorealistic.
 ---
 
-# Image to 1bit
+# Maka 1bit Skill
 
 Turn an input raster into intentional 1bit-style pixel art while preserving its composition. Use AI editing for semantic simplification. Run the local two-color processor only when the user requests strict binary output or the intended destination requires it.
 
