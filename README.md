@@ -1,5 +1,7 @@
 # Maka 1bit Skill
 
+Stable release: **1.0.0**
+
 A Codex skill for turning an existing raster image into composition-faithful 1bit-style pixel art, with optional technically verified two-color export.
 
 Pet portraits receive an identity-preservation pass for face geometry, unique markings, body proportions, paws, and tail before style conversion.
@@ -87,7 +89,9 @@ tests/
 
 ## Release status
 
-The skill was validated against private reference images. Those images and generated outputs are not published unless their owner explicitly approves it.
+Version 1.0.0 freezes the deterministic conversion core. See [RELEASE_NOTES.md](RELEASE_NOTES.md) for the release scope and [ROADMAP.md](ROADMAP.md) for optional frame, data-label, and poster-layout plans.
+
+The skill was validated against private reference images. Those images and generated outputs are excluded from the repository.
 
 ## License
 
