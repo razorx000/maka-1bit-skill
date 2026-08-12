@@ -2,12 +2,14 @@
 
 A Codex skill for turning an existing raster image into composition-faithful 1bit-style pixel art, with optional technically verified two-color export.
 
+Pet portraits receive an identity-preservation pass for face geometry, unique markings, body proportions, paws, and tail before style conversion.
+
 It combines two layers:
 
-1. semantic redraw with Codex ImageGen to simplify real subjects into intentional pixel-art forms while preserving composition;
-2. optional deterministic local post-processing to guarantee exactly two RGB colors, a hard pixel grid, integer nearest-neighbor scaling, and a PNG export.
+1. deterministic downsampling and preset-specific dithering to preserve source identity, composition, and tonal structure;
+2. optional controlled ImageGen simplification only when the source cannot remain readable, followed by the same deterministic two-color export.
 
-The default is an artistic export because real AI-generated 1bit-style references often use subtle intermediate RGB values for paper tone, glow, and atmosphere. Ask for `binary` when exactly two colors matter more than those subtleties.
+The default output is an exact two-color, grid-aligned PNG. Smooth AI-generated silhouettes are explicitly rejected because they lose the internal pixel-density structure seen in the accepted tests.
 
 ## Why a dedicated skill
 
@@ -15,9 +17,9 @@ Existing projects cover adjacent parts of the problem, but not the complete work
 
 - [OpenAI ImageGen skill](https://github.com/openai/skills/blob/main/skills/.system/imagegen/SKILL.md) provides general raster generation and editing, but does not enforce a 1bit palette or pixel-grid QA.
 - [Agent Sprite Forge](https://github.com/0x0funky/agent-sprite-forge) demonstrates a useful generation-plus-deterministic-processing architecture, but targets spritesheets and game assets rather than single-image composition-faithful conversion.
-- [makew0rld/dither](https://github.com/makew0rld/dither) is a strong traditional dithering library, but it is not an agent skill and does not perform semantic redraw.
+- [makew0rld/dither](https://github.com/makew0rld/dither) is a strong traditional dithering library, but it is not an agent skill and does not define subject-preservation or visual QA rules.
 
-This repository is independently implemented. It delegates creative editing to the installed ImageGen skill and provides its own small Pillow-based two-color processor and validator.
+This repository is independently implemented. Its default path uses a small Pillow-based two-color processor and validator. The installed ImageGen skill is only an optional last-resort simplification stage when deterministic tuning cannot keep the subject readable.
 
 ## Presets
 
@@ -25,7 +27,7 @@ This repository is independently implemented. It delegates creative editing to t
 - `soft-ink` — lighter green pixel-ink contours with sparse Atkinson texture.
 - `mono-print` — exact black and white with Floyd–Steinberg diffusion.
 
-Every preset supports `artistic` and `binary` export. Binary export contains exactly two RGB colors.
+Every preset exports exactly two RGB colors.
 
 ## Install
 
@@ -62,6 +64,7 @@ skills/maka-1bit-skill/
 ├── agents/openai.yaml
 ├── references/
 │   ├── qa-contract.md
+│   ├── pet-portraits.md
 │   └── style-presets.md
 └── scripts/
     ├── postprocess_1bit.py

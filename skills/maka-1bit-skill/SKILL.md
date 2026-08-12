@@ -1,53 +1,47 @@
 ---
 name: maka-1bit-skill
-description: Convert an existing photo, illustration, scan, or generated raster image into composition-faithful 1bit-style pixel art through semantic redraw, deliberate pixel clusters, limited tinted palettes, and optional strict two-color export with automated QA. Use when the user asks to turn an image into 1bit, one-bit, monochrome pixel art, Game Boy-like art, black-and-white dither art, retro bitmap art, or requests a result resembling a supplied 1bit reference. Do not use for ordinary grayscale conversion, general pixel-art creation without an input image, vector tracing, spritesheets, or edits that must remain photorealistic.
+description: Convert an existing photo, pet portrait, illustration, scan, or generated raster image into composition-faithful 1bit pixel art through deterministic downsampling, tonal reduction, deliberate dithering, limited two-color palettes, and automated QA, with optional controlled AI simplification only when the source does not remain readable. Use when the user asks to turn an image into 1bit, one-bit, monochrome pixel art, Game Boy-like art, black-and-white dither art, retro bitmap art, requests a 1bit portrait of their cat, dog, or other pet, or wants a result resembling a supplied 1bit reference. Do not use for ordinary grayscale conversion, general pixel-art creation without an input image, vector tracing, spritesheets, or edits that must remain photorealistic.
 ---
 
 # Maka 1bit Skill
 
-Turn an input raster into intentional 1bit-style pixel art while preserving its composition. Use AI editing for semantic simplification. Run the local two-color processor only when the user requests strict binary output or the intended destination requires it.
+Preserve the source composition and subject identity. Default to deterministic two-color reduction: downsample the original, compress continuous tone into preset-specific pixel density, and upscale on an integer grid. Never replace the source with a smooth vector silhouette.
 
 ## Required inputs
 
 - Require one edit-target image.
-- Accept an optional visual reference, palette, preset, crop request, and output size.
+- Accept an optional preset, two-color palette, crop request, logical resolution, and output scale.
 - Default to `strict-dither` when the user only asks for “1bit”.
-- Default to `artistic` export, which preserves the AI redraw's subtle green tone variation. Use `binary` export only when the user says strict, exact two colors, hardware-ready, print-ready, or explicitly asks for binary 1bit.
-- Treat `soft-ink` and `strict-dither` as observable style choices, not automatic color-depth claims.
-- Ask one concise question only when a missing choice would materially change the result. Otherwise use the defaults.
+- Default to exact two-color PNG output.
+- Ask one concise question only when a missing choice materially changes the result. Otherwise use the defaults.
 
-Read [references/style-presets.md](references/style-presets.md) before constructing the generation prompt. Read [references/qa-contract.md](references/qa-contract.md) before accepting a final image.
+Read [references/style-presets.md](references/style-presets.md) before processing. For a pet or animal, also read [references/pet-portraits.md](references/pet-portraits.md). Read [references/qa-contract.md](references/qa-contract.md) before accepting a final.
 
 ## Boundaries
 
-- Preserve the source subject count, identities, poses, spatial relationships, camera angle, and overall crop unless the user requests a change.
-- Simplify texture and lighting into readable shapes; do not merely apply a threshold filter when semantic redraw is available.
-- Do not add characters, props, text, borders, logos, watermarks, or narrative details.
-- Do not imitate a living artist. Translate a supplied reference into observable traits such as palette, outline weight, pixel clusters, and dither pattern.
+- Preserve subject count, identity, pose, camera angle, spatial relationships, crop, and aspect ratio unless the user requests a change.
+- Preserve recognition and tonal hierarchy while allowing downsampling to merge fine texture into coherent dither clusters.
+- Do not add, remove, mirror, relocate, or invent markings, anatomy, props, text, borders, logos, or watermarks.
+- Do not imitate a living artist. Translate references into observable palette and dither traits.
 - Do not overwrite the input. Save a new PNG.
-- Call the default output “1bit-style” rather than technically binary. Do not claim strict two-color compliance before the local validator passes.
+- Do not call a smooth black-and-white silhouette 1bit pixel art; internal volume must remain visible through pixel density or structural clusters.
 
 ## Workflow
 
-1. Inspect the edit target with the available image-viewing tool. Inspect every supplied style reference separately.
-2. Record a compact invariant list: subject count, pose, landmark positions, foreground/background relationship, crop, and forbidden additions.
-3. Select `strict-dither`, `soft-ink`, or a user-defined preset from [references/style-presets.md](references/style-presets.md).
-4. Load and follow the installed `$imagegen` skill. Use its built-in image editing path with the original image as the edit target. Use any style image only as a style reference.
-5. Prompt for a composition-faithful semantic redraw. Include the invariant list on every iteration. Ask for hard-edged pixel clusters, a two-tone design, no antialiasing, no gradients, no text, and no added objects.
-6. Inspect the generated result. Reject it before post-processing if the subject, pose, layout, crop, or major silhouettes drifted. Iterate with one targeted correction.
-7. Copy the accepted generated image into the project workspace when it is project-bound.
-8. For the default `artistic` export, keep the accepted AI redraw and proceed to visual QA. Do not force it through binary quantization.
-9. For a requested `binary` export, run deterministic post-processing:
+1. Inspect the input and any style reference.
+2. Record invariants: subject identity, pose, visible landmarks, crop, foreground/background relationship, and forbidden additions. For pets, build the identity ledger in [references/pet-portraits.md](references/pet-portraits.md).
+3. Select `strict-dither`, `soft-ink`, `mono-print`, or a custom preset from [references/style-presets.md](references/style-presets.md).
+4. Process the original image directly:
 
    ```bash
    python3 scripts/postprocess_1bit.py \
-     --input <generated-image> \
+     --input <original-image> \
      --output <final.png> \
      --preset strict-dither
    ```
 
-   Use `--preset soft-ink` when requested. Pass `--dark` and `--light` only for a user-defined palette. Use `--logical-long-edge` to change pixel density and `--scale` to change nearest-neighbor display scale.
-10. Validate a binary export:
+   Use `--logical-long-edge` to control abstraction: lower values merge more detail; higher values preserve small identity anchors. Use `--scale` only for integer nearest-neighbor display scaling. Pass `--dark` and `--light` only for a custom palette.
+5. Validate the output:
 
    ```bash
    python3 scripts/validate_1bit.py \
@@ -56,20 +50,21 @@ Read [references/style-presets.md](references/style-presets.md) before construct
      --pixel-scale 4
    ```
 
-11. Inspect the final PNG at original display size and zoomed in. Apply the acceptance rules in [references/qa-contract.md](references/qa-contract.md). If it fails visual QA, change one variable at a time: AI prompt, logical resolution, contrast, dither method, or threshold.
-12. Return the final PNG inline and report its saved path, style preset, export mode, and visual QA result. For `binary`, also report its two palette colors, logical resolution, scale, dither method, and validator result.
+6. Inspect the original and final at thumbnail size and 100% zoom. Check identity, tonal hierarchy, pixel clusters, and every rule in [references/qa-contract.md](references/qa-contract.md).
+7. Fix one variable at a time. Raise logical resolution if a defining mark disappears; lower it if irrelevant detail dominates. Adjust contrast, threshold, or dither method only after resolution.
+8. Only if direct conversion cannot preserve readable subject structure, load `$imagegen` and create one composition-locked tonal simplification intermediate. Preserve identity and broad light/shadow planes. Never ask ImageGen to create the final 1bit effect, and never deliver the AI intermediate directly; run it through steps 4–7.
+9. Return the final PNG inline and report its path, preset, palette, logical resolution, scale, method, and validator result.
 
 ## Execution choices
 
-- Prefer semantic redraw for photos and complex illustrations. Preserve the accepted artistic redraw unless strict binary output is required.
-- Allow deterministic-only conversion when the user explicitly asks for a literal filter, when ImageGen is unavailable, or when exact geometry matters more than simplification. State that this preserves pixels but does not redraw forms.
-- Generate one candidate first. Create multiple variants only when the user requests them or the first candidate reveals a real style ambiguity.
-- Keep the AI generation stage non-destructive and the post-processing stage reproducible.
+- Prefer direct deterministic conversion for photos, pets, portraits, and all identity-sensitive subjects.
+- When comparing presets, process the same original or the same accepted intermediate through every preset.
+- Keep all stages non-destructive and reproducible.
+- For white, black, or low-contrast pets, tune logical resolution and contrast before considering AI.
 
 ## Failure handling
 
-- If ImageGen is unavailable, offer deterministic-only conversion and explain its limitation; do not silently substitute it for semantic redraw.
-- If a binary export's validator reports more than two colors, rerun post-processing from the accepted generated image.
-- If pixel-grid alignment fails, rerun with integer `--scale` and do not resize the final PNG afterward with a smoothing filter.
-- If composition drift exceeds the source, return to the AI edit stage rather than trying to repair the drift with dithering.
-- If thin features disappear, raise `--logical-long-edge` before reducing contrast.
+- If the validator reports more than two colors or grid misalignment, rerun deterministic processing from the same source.
+- If a small feature disappears, raise `--logical-long-edge` before changing the palette or using AI.
+- If the result is too literal, lower `--logical-long-edge` for stronger deterministic abstraction.
+- If an optional AI intermediate drifts from the source, discard it and return to the original.

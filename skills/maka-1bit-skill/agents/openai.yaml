@@ -1,4 +1,4 @@
 interface:
   display_name: "Maka 1bit Skill"
-  short_description: "Create composition-faithful 1bit-style image art"
-  default_prompt: "Use $maka-1bit-skill to turn this image into composition-faithful 1bit-style pixel art."
+  short_description: "Create identity-faithful, verified two-color pixel art"
+  default_prompt: "Use $maka-1bit-skill to convert this image into verified two-color 1bit pixel art while preserving subject identity, composition, and tonal structure."

@@ -1,50 +1,45 @@
 # Style presets
 
-The supplied tests use many RGB values—approximately 105,598 in `test01` and 49,999 in `test02`—despite reading visually as 1bit. Match their visual language through semantic redraw by default. Quantize to exactly two colors only for `binary` export.
+All presets preserve the same source composition and tonal structure. Their difference comes from palette and deterministic dither behavior, not from three independent AI redraws.
+
+## Shared abstraction contract
+
+- Downsample before dithering so small detail merges naturally.
+- Preserve identity anchors, silhouettes, facial geometry, joints, paws/hands, and essential scene relationships through tonal contrast.
+- Let pixel density describe internal volume; do not flatten the subject into a logo.
+- Preserve crop and aspect ratio unless reframing is requested.
+- Judge subject, pose, and tonal hierarchy at thumbnail size before judging individual pixels.
 
 ## `strict-dither` — default
 
-Use for a visibly strict two-tone bitmap result with bold contours and patterned shade.
-
-- Binary palette: dark `#0b0e08`, light `#bac3a0`
-- Post-process method: `bayer4`
+- Palette: dark `#0b0e08`, light `#bac3a0`
+- Method: `bayer4`
 - Logical long edge: `512`
 - Display scale: `4`
-- Visual traits: hard black-green contour, large flat light regions, checker/stipple clusters in midtones, squared corners, no soft gradients
-- Prompt clause:
-
-  ```text
-  Rebuild the edit target as composition-faithful 1bit pixel art. Preserve every major subject, pose, landmark position, camera angle, and crop. Use bold near-black stepped contours, large pale olive tone fields, and deliberate ordered checker/stipple pixel clusters for selected midtone shading. Keep pixels hard-edged and grid-aligned. Simplify material texture into readable silhouettes and interior contour lines. Use only a two-tone visual design. No antialiasing, gradients, blur, soft brushwork, photorealistic texture, vector-smooth curves, added objects, text, frame, logo, or watermark.
-  ```
+- Character: regular mechanical Bayer grid, stable checker structures, crisp transitions, olive/near-black palette.
+- Best for: graphic scenes, architecture, objects, or users who want visible ordered pixels.
 
 ## `soft-ink`
 
-Use for the lighter green, hand-inked interpretation seen in the supplied `test01` reference.
-
-- Binary palette: dark `#103b2b`, light `#dcefc8`
-- Post-process method: `atkinson`
+- Palette: dark `#103b2b`, light `#dcefc8`
+- Method: `atkinson`
 - Logical long edge: `512`
 - Display scale: `4`
-- Visual traits: selective dark-green contour, generous pale background, simplified volume, sparse clustered dither, less solid black coverage
-- Prompt clause:
-
-  ```text
-  Rebuild the edit target as a composition-faithful two-tone green pixel-ink illustration. Preserve every major subject, pose, landmark position, camera angle, and crop. Use crisp stepped dark-green contours, broad pale-green fields, simplified anatomical and object planes, and sparse intentional pixel clusters only where shading is needed. Keep the result airy and readable rather than heavily black. No antialiasing, gradients, blur, photographic texture, smooth vector curves, added objects, text, frame, logo, or watermark.
-  ```
+- Character: lighter perceived exposure, organic irregular clusters, open pale areas, dark-green/pale-green palette.
+- Best for: portraits, pets, organic forms, and a softer early-Macintosh-like texture.
 
 ## `mono-print`
 
-Use when the user explicitly wants black and white rather than tinted two-tone art.
-
-- Binary palette: dark `#000000`, light `#ffffff`
-- Post-process method: `floyd-steinberg`
+- Palette: dark `#000000`, light `#ffffff`
+- Method: `floyd-steinberg`
 - Logical long edge: `512`
 - Display scale: `4`
-- Visual traits: high-contrast print, dispersed error-diffusion texture, exact black and white
+- Character: exact black and white, strongest luminance contrast, fine dispersed error-diffusion clusters that retain internal volume.
+- Best for: monochrome print, e-paper, laser output, or strict black-and-white requests.
+- Reject: flat white subject on flat black background with only smooth contour lines; that is a silhouette illustration, not this preset.
 
 ## Custom choices
 
-- Accept any two valid six-digit hexadecimal colors.
-- Keep the darker color first. Compare relative luminance and swap internally if necessary.
-- Prefer `bayer4` for graphic ordered dots, `atkinson` for lighter Macintosh-like texture, `floyd-steinberg` for continuous tonal retention, and `threshold` for poster-like flat masses.
-- Use a logical long edge of `256` for chunkier pixels, `512` for the default balance, and `768` only for dense architecture or fine linework.
+- Accept any two six-digit hexadecimal colors and keep the darker color first.
+- Use `bayer4` for an obvious ordered grid, `bayer8` for a finer ordered screen, `atkinson` for lighter organic clusters, `floyd-steinberg` for tonal retention, and `threshold` only for deliberately flat poster masses.
+- Use logical long edge `256` for chunky abstraction, `512` for the default balance, and `768` for small identity marks or dense linework.
