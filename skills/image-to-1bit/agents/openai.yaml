@@ -1,0 +1,4 @@
+interface:
+  display_name: "Image to 1bit"
+  short_description: "Create composition-faithful 1bit-style image art"
+  default_prompt: "Use $image-to-1bit to turn this image into composition-faithful 1bit-style pixel art."
