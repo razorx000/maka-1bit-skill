@@ -10,25 +10,28 @@ from pathlib import Path
 from PIL import Image, ImageEnhance, ImageOps
 
 
-PRESETS = {
+STYLES = {
     "strict-dither": {
-        "dark": "#0b0e08",
-        "light": "#bac3a0",
         "method": "bayer4",
         "contrast": 1.25,
     },
     "soft-ink": {
-        "dark": "#103b2b",
-        "light": "#dcefc8",
         "method": "atkinson",
         "contrast": 1.10,
     },
     "mono-print": {
-        "dark": "#000000",
-        "light": "#ffffff",
         "method": "floyd-steinberg",
         "contrast": 1.20,
     },
+}
+
+PALETTES = {
+    "olive-terminal": ("#0b0e08", "#bac3a0"),
+    "soft-mint": ("#103b2b", "#dcefc8"),
+    "classic-mono": ("#000000", "#ffffff"),
+    "amber-screen": ("#2a1600", "#f2c14e"),
+    "cobalt-ice": ("#071d3b", "#b8dbff"),
+    "plum-paper": ("#2e102f", "#efcfea"),
 }
 
 BAYER4 = (
@@ -148,7 +151,8 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--input", required=True, type=Path)
     parser.add_argument("--output", required=True, type=Path)
-    parser.add_argument("--preset", choices=PRESETS, default="strict-dither")
+    parser.add_argument("--style", "--preset", dest="style", choices=STYLES, required=True)
+    parser.add_argument("--palette", choices=PALETTES)
     parser.add_argument("--dark", type=hex_color)
     parser.add_argument("--light", type=hex_color)
     parser.add_argument(
@@ -176,15 +180,24 @@ def main() -> int:
     if args.scale < 1 or args.scale > 32:
         raise SystemExit("scale must be between 1 and 32")
 
-    preset = PRESETS[args.preset]
-    dark = args.dark or hex_color(preset["dark"])
-    light = args.light or hex_color(preset["light"])
+    style = STYLES[args.style]
+    if args.palette and (args.dark or args.light):
+        raise SystemExit("use either --palette or both --dark and --light, not both")
+    if args.palette:
+        palette_name = args.palette
+        dark = hex_color(PALETTES[args.palette][0])
+        light = hex_color(PALETTES[args.palette][1])
+    elif args.dark and args.light:
+        palette_name = "custom"
+        dark, light = args.dark, args.light
+    else:
+        raise SystemExit("choose --palette or provide both --dark and --light")
     if dark == light:
         raise SystemExit("dark and light colors must differ")
     if luminance(dark) > luminance(light):
         dark, light = light, dark
-    method = args.method or preset["method"]
-    contrast = args.contrast if args.contrast is not None else preset["contrast"]
+    method = args.method or style["method"]
+    contrast = args.contrast if args.contrast is not None else style["contrast"]
     if not math.isfinite(contrast) or contrast <= 0:
         raise SystemExit("contrast must be a positive finite number")
 
@@ -214,7 +227,8 @@ def main() -> int:
     result.save(args.output, format="PNG", optimize=True)
     print(
         f"saved={args.output} logical={logical[0]}x{logical[1]} "
-        f"output={result.width}x{result.height} method={method} "
+        f"output={result.width}x{result.height} style={args.style} "
+        f"palette_name={palette_name} method={method} "
         f"palette=#{dark[0]:02x}{dark[1]:02x}{dark[2]:02x},"
         f"#{light[0]:02x}{light[1]:02x}{light[2]:02x}"
     )
