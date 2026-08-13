@@ -1,41 +1,41 @@
-# Roadmap
+# 路线图
 
-Maka 1bit Skill keeps image conversion and graphic-design composition as separate layers. Version 1.0 freezes the conversion core; later minor versions may add optional design effects without changing the selected dither style or palette.
+Maka 1bit Skill 将图像转换和图形设计编排分成独立层。版本 1.0 固定转换核心；后续小版本可以添加可选设计效果，但不得改变用户选择的抖动风格或色板。
 
-## 1.0 — conversion core
+## 1.0 — 转换核心
 
-- Three deterministic dither styles
-- Six strict two-color palettes
-- Mandatory style and palette selection gates
-- Composition and identity preservation rules
-- Pet-specific identity checks
-- Exact two-color and pixel-grid validation
+- 三种确定性抖动风格
+- 六种严格双色色板
+- 必选的风格和色板选择步骤
+- 构图与身份保留规则
+- 宠物身份专项检查
+- 严格双色与像素网格验证
 
-## 1.1 — frame layouts
+## 1.1 — 边框布局
 
-- `none` and `frame` output modes
-- Configurable inset, border width, and image alignment
-- Aspect-ratio-safe placement inside a two-color frame
-- Regression tests proving the embedded image is not resampled with smoothing
+- `none` 和 `frame` 输出模式
+- 可配置内边距、边框宽度和图片对齐方式
+- 在双色边框内保持宽高比嵌入图片
+- 通过回归测试证明嵌入图片没有被平滑重采样
 
-## 1.2 — data labels
+## 1.2 — 数据标签
 
-- Optional title, index, numeric value, and compact metadata fields
-- Pixel-font handling with explicit fallback rules
-- Overflow, safe-area, and contrast checks
-- No generated or inferred values: display only user-provided data
+- 可选标题、索引、数值和紧凑元数据字段
+- 像素字体处理及明确的后备规则
+- 溢出、安全区域和对比度检查
+- 不生成或推断数值，只显示用户提供的数据
 
-## 1.3 — poster systems
+## 1.3 — 海报系统
 
-- Reusable grid, header, footer, and caption layouts
-- Composable frame and data-label modules
-- Output-size presets for screen and print
-- Final whole-canvas two-color validation
+- 可复用的网格、页眉、页脚和说明文字布局
+- 可组合的边框与数据标签模块
+- 屏幕与印刷输出尺寸预设
+- 对完整画布执行最终严格双色验证
 
-## Design constraints
+## 设计约束
 
-- Keep the original 1bit conversion available as `none` with no design layer.
-- Apply design effects after the base 1bit image passes validation.
-- Preserve exactly two RGB colors across the entire final canvas.
-- Never change the chosen style, palette, crop, or subject identity implicitly.
-- Test each new effect independently and in supported combinations.
+- 保留 `none` 模式，使原始 1bit 转换无需设计层即可使用。
+- 基础 1bit 图片验证通过后，才能应用设计效果。
+- 整张最终画布始终严格保持两种 RGB 颜色。
+- 不得隐式改变所选风格、色板、裁切或主体身份。
+- 每种新效果都要单独测试，并测试受支持的组合。
