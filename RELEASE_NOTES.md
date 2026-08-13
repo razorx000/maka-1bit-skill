@@ -1,22 +1,22 @@
 # Maka 1bit Skill 1.0.0
 
-The first stable release focuses on a reproducible image-to-1bit workflow.
+首个稳定版本聚焦于可复现的图片转 1bit 流程。
 
-## Highlights
+## 重点功能
 
-- Choose one of three dither styles: `strict-dither`, `soft-ink`, or `mono-print`.
-- Choose one of six two-color palettes independently from the style.
-- Pause for both choices after image upload; never assume a style or palette.
-- Preserve composition, subject identity, recognizable landmarks, and tonal hierarchy.
-- Apply additional identity checks to pet portraits.
-- Export grid-aligned RGB PNG files containing exactly two colors.
-- Validate all 18 built-in style and palette combinations.
+- 从 `strict-dither`、`soft-ink` 和 `mono-print` 中选择一种抖动风格。
+- 独立选择六种双色色板之一。
+- 图片上传后暂停并取得两个选择，不假设风格或色板默认值。
+- 保留构图、主体身份、可辨识特征和明暗层级。
+- 对宠物肖像执行额外的身份检查。
+- 导出对齐像素网格且严格包含两种颜色的 RGB PNG。
+- 验证全部 18 种内置风格与色板组合。
 
-## Requirements
+## 环境要求
 
-- Python 3.10 or later
-- Pillow 10 or later
+- Python 3.10 或更高版本
+- Pillow 10 或更高版本
 
-## Scope
+## 版本范围
 
-Version 1.0 does not include frames, numeric labels, or poster layouts. These are planned as optional post-processing layers in later minor releases so the conversion core remains stable.
+版本 1.0 不包含边框、数值标签或海报布局。这些功能计划作为后续小版本中的可选后处理层加入，以保持转换核心稳定。
