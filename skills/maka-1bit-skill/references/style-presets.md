@@ -1,42 +1,42 @@
-# Style presets
+# 风格预设
 
-All styles preserve the same source composition and tonal structure. Style controls only the deterministic dither behavior. Choose color separately from [palette-presets.md](palette-presets.md).
+所有风格都保留相同的源图构图与明暗结构。风格只控制确定性的抖动方式，颜色需从 [palette-presets.md](palette-presets.md) 中另行选择。
 
-## Shared abstraction contract
+## 共用概括约定
 
-- Downsample before dithering so small detail merges naturally.
-- Preserve identity anchors, silhouettes, facial geometry, joints, paws/hands, and essential scene relationships through tonal contrast.
-- Let pixel density describe internal volume; do not flatten the subject into a logo.
-- Preserve crop and aspect ratio unless reframing is requested.
-- Judge subject, pose, and tonal hierarchy at thumbnail size before judging individual pixels.
+- 先缩小再抖动，让微小细节自然合并。
+- 通过明暗对比保留身份锚点、轮廓、面部结构、关节、爪子 / 手部及关键场景关系。
+- 用像素密度表现内部体积，不得把主体压平成标志图形。
+- 除非用户要求重新取景，否则保留裁切与宽高比。
+- 先以缩略图判断主体、姿势和明暗层级，再判断单个像素。
 
 ## `strict-dither`
 
-- Method: `bayer4`
-- Logical long edge: `512`
-- Display scale: `4`
-- Character: regular mechanical Bayer grid, stable checker structures, and crisp transitions.
-- Best for: graphic scenes, architecture, objects, or users who want visible ordered pixels.
+- 方法：`bayer4`
+- 逻辑长边：`512`
+- 显示缩放：`4`
+- 特征：规则机械的 Bayer 网格、稳定的棋盘结构和利落的明暗过渡。
+- 适合：图形化场景、建筑、物体，或希望明显看到规则像素的用户。
 
 ## `soft-ink`
 
-- Method: `atkinson`
-- Logical long edge: `512`
-- Display scale: `4`
-- Character: lighter perceived exposure, organic irregular clusters, and open pale areas.
-- Best for: portraits, pets, organic forms, and a softer early-Macintosh-like texture.
+- 方法：`atkinson`
+- 逻辑长边：`512`
+- 显示缩放：`4`
+- 特征：视觉曝光更轻盈、有机的不规则像素簇和开放的亮部区域。
+- 适合：肖像、宠物、有机形体，以及较柔和的早期 Macintosh 纹理。
 
 ## `mono-print`
 
-- Method: `floyd-steinberg`
-- Logical long edge: `512`
-- Display scale: `4`
-- Character: fine dispersed error-diffusion clusters that retain internal volume.
-- Best for: photographic tonal retention, print-like texture, or fine modeling.
-- Reject: flat white subject on flat black background with only smooth contour lines; that is a silhouette illustration, not this preset.
+- 方法：`floyd-steinberg`
+- 逻辑长边：`512`
+- 显示缩放：`4`
+- 特征：细密分散的误差扩散像素簇，能够保留内部体积。
+- 适合：保留照片明暗、印刷质感或精细塑形。
+- 拒绝：只有平滑轮廓线的纯白主体与纯黑背景；这是剪影插画，不属于该预设。
 
-## Custom choices
+## 自定义选择
 
-- Accept custom colors only when the user explicitly provides both six-digit hexadecimal colors; keep the darker color first.
-- Use `bayer4` for an obvious ordered grid, `bayer8` for a finer ordered screen, `atkinson` for lighter organic clusters, `floyd-steinberg` for tonal retention, and `threshold` only for deliberately flat poster masses.
-- Use logical long edge `256` for chunky abstraction, `512` for the default balance, and `768` for small identity marks or dense linework.
+- 只有当用户明确提供两个六位十六进制颜色时，才接受自定义颜色；始终将深色放在前面。
+- 明显的规则网格使用 `bayer4`，更细的规则网屏使用 `bayer8`，轻盈有机的像素簇使用 `atkinson`，保留明暗使用 `floyd-steinberg`，只有刻意追求平面海报色块时才使用 `threshold`。
+- 逻辑长边 `256` 用于粗颗粒概括，`512` 是默认平衡值，`768` 用于细小身份标记或密集线稿。
