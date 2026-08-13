@@ -1,4 +1,4 @@
 interface:
   display_name: "Maka 1bit Skill"
-  short_description: "Choose style and palette for verified 1bit art"
-  default_prompt: "Use $maka-1bit-skill to convert this image, asking me to choose one of three styles and then one of six palettes before processing."
+  short_description: "先选择风格和色板，再生成经过验证的 1bit 图像"
+  default_prompt: "使用 $maka-1bit-skill 处理这张图片；请先让我选择三种风格之一，再选择六种色板之一，然后开始处理。"
