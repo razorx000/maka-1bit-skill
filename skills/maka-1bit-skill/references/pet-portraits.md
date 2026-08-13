@@ -1,44 +1,43 @@
-# Pet portraits
+# 宠物肖像
 
-Use this branch whenever a recognizable pet is the main subject. Preserve the individual animal, not merely its species or coat color.
+当可辨识的宠物是画面主体时，使用本分支。必须保留这只动物的个体特征，不能只保留物种或毛色。
 
-## Identity ledger
+## 身份清单
 
-Record only visible facts:
+只记录画面中可见的事实：
 
-1. species and broad coat type
-2. body proportions and silhouette
-3. pose, head direction, gaze, and expression
-4. ear shape, spacing, fold, crop, or asymmetry
-5. eye shape, angle, relative size, and visible color
-6. muzzle, nose, and face proportions
-7. patches, spots, stripes, scars, or asymmetric marks
-8. tail shape, color, position, and visibility
-9. paw placement and distinctive leg markings
-10. existing collar, tag, harness, or accessory
+1. 物种及整体毛发类型
+2. 身体比例与轮廓
+3. 姿势、头部朝向、视线和表情
+4. 耳朵形状、间距、折叠、缺口或不对称
+5. 眼睛形状、角度、相对大小和可见颜色
+6. 口鼻、鼻子及面部比例
+7. 色块、斑点、条纹、疤痕或不对称标记
+8. 尾巴的形状、颜色、位置和可见程度
+9. 爪子位置及有辨识度的腿部斑纹
+10. 原本存在的项圈、吊牌、胸背或配饰
 
-Describe sides from the viewer's perspective. Never infer breed, personality, sex, age, or health.
+左右方向以观看者视角描述。不得推断品种、性格、性别、年龄或健康状况。
 
-## Priority and processing
+## 优先级与处理
 
-Preserve unique markings first, then face geometry, body proportions, pose/paws/tail, coat texture, and background detail. Prefer direct deterministic conversion because it cannot hallucinate or relocate identity marks.
+依次保留：独特斑纹、面部结构、身体比例、姿势 / 爪子 / 尾巴、毛发纹理、背景细节。优先直接进行确定性转换，因为它不会凭空产生或移动身份标记。
 
-- Choose a logical resolution high enough for eyes, nose, unique marks, ear tips, paw separations, and visible tail to survive.
-- Let downsampling merge individual hairs into coat-direction clusters.
-- For a white pet, preserve separation through the source's shadow-density difference; for a black pet, preserve existing highlights and negative separations.
-- If a small mark disappears, raise logical resolution or local contrast before using AI.
-- Preserve scene context when it grounds the pose; do not add collars, toys, bowls, clothing, halos, or symbols.
+- 选择足以保留眼睛、鼻子、独特斑纹、耳尖、爪子分隔和可见尾巴的逻辑分辨率。
+- 让缩小过程把单根毛发合并为顺着毛流方向的像素簇。
+- 白色宠物依靠源图中的阴影密度差异与背景分离；黑色宠物保留原有高光与负形分隔。
+- 小斑纹消失时，先提高逻辑分辨率或局部对比度，再考虑 AI。
+- 当场景有助于支撑姿势时保留环境；不得新增项圈、玩具、食盆、服装、光环或符号。
 
-## Pet QA
+## 宠物质检
 
-Reject the result if:
+出现以下任一情况必须拒绝结果：
 
-- a unique mark disappears or becomes unreadable
-- eye, ear, muzzle, body-width, or head-to-body proportions lose recognition
-- paws merge or the tail feature disappears
-- an accessory or extra marking appears
-- the animal becomes a generic silhouette
-- pixel density no longer follows the source's facial and body volume
+- 独特斑纹消失或无法辨认
+- 眼睛、耳朵、口鼻、身体宽度或头身比例失去辨识度
+- 爪子粘连或尾巴特征消失
+- 出现原图没有的配饰或额外斑纹
+- 动物变成泛化的剪影
+- 像素密度不再遵循源图面部与身体的体积关系
 
-If an AI intermediate becomes necessary, lock every identity anchor and broad tonal plane, then run the intermediate through deterministic conversion.
-
+如必须使用 AI 中间图，锁定每个身份锚点和大块明暗面，再对中间图执行确定性转换。
