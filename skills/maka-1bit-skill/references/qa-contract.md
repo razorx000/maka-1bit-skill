@@ -1,50 +1,50 @@
-# QA contract
+# 质检约定
 
-Accept a final only after both semantic and technical checks pass.
+语义检查与技术检查全部通过后，才能接受最终结果。
 
-## Semantic checks
+## 语义检查
 
-- Preserve the source subject count and identities.
-- Preserve the dominant pose, silhouette, gaze/direction, camera angle, spatial relationships, and recognizable landmarks.
-- Preserve the intended crop unless the user requested reframing.
-- Add no objects, anatomy, text, border, signature, logo, or watermark.
-- Keep important thin features legible at the final logical resolution.
+- 保留源图中的主体数量和身份。
+- 保留主要姿势、轮廓、视线 / 朝向、拍摄角度、空间关系及可辨识特征。
+- 除非用户要求重新取景，否则保留原裁切。
+- 不得新增物体、解剖结构、文字、边框、签名、标志或水印。
+- 在最终逻辑分辨率下保持重要细线特征清晰可读。
 
-Perform these checks visually before and after deterministic post-processing. Automated metrics do not replace visual comparison.
+在确定性后处理前后都进行视觉检查。自动指标不能替代视觉对比。
 
-For pet portraits, additionally apply every rejection rule in [pet-portraits.md](pet-portraits.md). Treat a missing or moved identity mark, changed eye/ear geometry, altered body proportion, or changed paw/tail placement as a semantic failure even when the overall style is strong.
+处理宠物肖像时，还要执行 [pet-portraits.md](pet-portraits.md) 中的每一条拒绝规则。即使整体风格出色，只要身份斑纹缺失或移动、眼睛 / 耳朵结构改变、身体比例改变，或爪子 / 尾巴位置改变，都视为语义失败。
 
-## Style checks
+## 风格检查
 
-- Make individual pixels or pixel clusters visibly intentional at 100% zoom.
-- Use hard edges with no resampling blur.
-- Prefer coherent clusters over isolated salt-and-pepper noise.
-- Reserve solid dark masses for structural shadow and outline while retaining internal volume through dither density.
-- Avoid pseudo-pixel artifacts: smooth diagonal antialiasing, soft gradients, JPEG halos, and subpixel-looking strokes.
-- Require thumbnail readability before texture readability.
-- Require dither density to follow the source tonal hierarchy instead of acting as arbitrary decoration.
-- Reject smooth vector-like silhouettes that remove internal form, even if they technically contain two colors.
+- 在 100% 缩放时，单个像素或像素簇应当清晰且有意图。
+- 使用硬边缘，不得出现重采样模糊。
+- 优先形成连贯像素簇，避免孤立的椒盐噪点。
+- 仅将实心深色块用于结构阴影和轮廓，同时用抖动密度保留内部体积。
+- 避免伪像素效果：平滑对角抗锯齿、柔和渐变、JPEG 光晕和看似亚像素的线条。
+- 先保证缩略图可读，再判断纹理表现。
+- 抖动密度必须遵循源图明暗层级，不能成为随意装饰。
+- 拒绝抹除内部形体的平滑矢量剪影，即使它在技术上只有两种颜色。
 
-## Technical checks for `binary` export
+## `binary` 导出的技术检查
 
-Require all of the following:
+必须满足以下所有条件：
 
-- PNG output
-- RGB color model
-- exactly two unique RGB colors
-- positive dimensions divisible by the declared integer display scale
-- uniform blocks aligned to that scale
-- source-to-output aspect-ratio drift no greater than 15% unless reframing was requested
+- 输出格式为 PNG
+- 颜色模式为 RGB
+- 恰好包含两个不同的 RGB 颜色
+- 正尺寸可以被声明的整数显示缩放倍数整除
+- 色块按该缩放倍数的网格对齐
+- 除非用户要求重新取景，否则输出相对源图的宽高比漂移不得超过 15%
 
-Run `scripts/validate_1bit.py`; require exit status 0 and `"passed": true`.
+运行 `scripts/validate_1bit.py`；要求退出状态为 0，且结果包含 `"passed": true`。
 
-## Iteration order
+## 迭代顺序
 
-Fix the earliest failing layer first:
+优先修正最早失败的层级：
 
-1. missing identity detail: raise logical resolution
-2. excessive irrelevant detail: lower logical resolution
-3. muddy tonal separation: adjust contrast or threshold
-4. unwanted texture character: select the correct preset method
-5. technical palette/grid failure: rerun deterministic post-processing
-6. unreadable structure after deterministic tuning: create one controlled AI intermediate
+1. 身份细节缺失：提高逻辑分辨率
+2. 无关细节过多：降低逻辑分辨率
+3. 明暗分离浑浊：调整对比度或阈值
+4. 纹理特征不符：选择正确的预设方法
+5. 色板 / 网格技术失败：重新执行确定性后处理
+6. 确定性调整后结构仍不可读：创建一张受控的 AI 中间图
